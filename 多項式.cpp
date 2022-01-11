@@ -22,11 +22,11 @@ vector<Node> sort(vector<Node> poly, string s){
 	string coefstring = "";
 	Node node;
 	while(n<s.length()){
-		if(s[n] != '+' && s[n] != '-'){			//若不是加減符號 
+		if(s[n] != '+' && s[n] != '-'){			//??????? 
 			sub += s[n];
 			n++;
-		}else{				//若是加減符號則進行分類 
-			while(i<sub.length()){		//例如:sub = 5x^3 進行前後分割 
+		}else{				//??????????? 
+			while(i<sub.length()){		//??:sub = 5x^3 ?????? 
 				if(sub[i] != 'x'){		
 					coefstring += sub[i];
 					i++;
@@ -45,7 +45,7 @@ vector<Node> sort(vector<Node> poly, string s){
 				}
 			}
 			
-			if(s[n] == '-'){			//嚙緘嚙瘦嚙磊嚙諉數字嚙瞌嚙緣嚙複開嚙磐嚙踝蕭嚙稼- 
+			if(s[n] == '-'){			//????????????????????????- 
 				sub += "-";
 			}
 			i = 0;

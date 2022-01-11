@@ -2,74 +2,92 @@
 #include <queue>
 #include <stack>
 
-struct element{
+struct element
+{
 	short int x;
 	short int y;
-	element* last;
+	element *last;
 };
-std::queue<element*> pathpoint;			//¦s©ñ¥Ø«e¨«¨ìªº¸ô®|ÂI 
+std::queue<element *> pathpoint; //å­˜æ”¾ç›®å‰èµ°åˆ°çš„è·¯å¾‘é»ž
 
-struct point{
+struct point
+{
 	int x;
 	int y;
 };
 
-struct offsets{
+struct offsets
+{
 	short int vert;
 	short int horiz;
 };
 
-int main(){
-	offsets move[8] = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}}; 		//¨M©w¤K­Ó¤è¦ì¸Ó²¾°Êªº¤ô¥­««ª½
+int main()
+{
+	offsets move[8] = {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}}; //æ±ºå®šå…«å€‹æ–¹ä½è©²ç§»å‹•çš„æ°´å¹³åž‚ç›´
 
-	int size[2] = {0};			//Åª¤J°g®c¤j¤p 
+	int size[2]; //è®€å…¥è¿·å®®å¤§å°
 	std::cin >> size[0];
 	std::cin >> size[1];
-	
-	int maze[size[0]+2][size[1]+2] = {0};		//Åª¤J°g®c¨Ã¥[¤WÃä¬É 
-	for(int i=0; i<size[0]+2; i++){
-		for(int j=0; j<size[1]+2; j++){
-			if(i == 0 || j == 0 || i == size[0]+1 || j == size[0]+1){
+
+	int maze[size[0] + 2][size[1] + 2]; //è®€å…¥è¿·å®®ä¸¦åŠ ä¸Šé‚Šç•Œ
+	memset(maze, 0, (size[0] + 2) * (size[1] + 2) * sizeof(int));
+
+	for (int i = 0; i < size[0] + 2; i++)
+	{
+		for (int j = 0; j < size[1] + 2; j++)
+		{
+			if (i == 0 || j == 0 || i == size[0] + 1 || j == size[0] + 1)
+			{
 				maze[i][j] = 1;
-			}else{
-				std::cin >> maze[i][j];	
+			}
+			else
+			{
+				std::cin >> maze[i][j];
 			}
 		}
 	}
-	
+
 	maze[1][1] = 2;
 	bool found = false;
 	element *start = new element;
 	start->x = 1;
 	start->y = 1;
-	start->last = NULL;
+	start->last = start;
 	pathpoint.push(start);
-	while(1){
+	while (1)
+	{
 		element *front = pathpoint.front();
 		pathpoint.pop();
-		for(int i=0; i<8; i++){			
+		if (front->x == size[0] && front->y == size[1])
+		{
+			break;
+		}
+		for (int i = 0; i < 8; i++)
+		{
 			element *temp = new element;
 			temp->x = front->x + move[i].horiz;
 			temp->y = front->y + move[i].vert;
-			if(maze[temp->x][temp->y] == 0){
+			if (maze[temp->x][temp->y] == 0)
+			{
 				temp->last = front;
 				pathpoint.push(temp);
 				maze[temp->x][temp->y] = maze[front->x][front->y] + 1;
 			}
 		}
-		if(front->x == size[0] && front->y== size[1]){
-			break;
-		}
 	}
-	
-	std::stack<point> path;			//µ²ªG¸ô®| 
-	point p = {size[0], size[1]};		//¥ý©ñ²×ÂI 
+
+	std::stack<point> path;				//çµæžœè·¯å¾‘
+	point p = {size[0], size[1]}; //å…ˆæ”¾çµ‚é»ž
 	path.push(p);
-	int pathnumber = maze[size[0]][size[1]] - 1;		//Á`¦@­n¨«´X¨B-1 
-	for(; pathnumber > 1; pathnumber--){
-		for(int i = 0; i<8; i++){		//¤§«áºCºC¦^±À 
+	int pathnumber = maze[size[0]][size[1]] - 1; //ç¸½å…±è¦èµ°å¹¾æ­¥-1
+	for (; pathnumber > 1; pathnumber--)
+	{
+		for (int i = 0; i < 8; i++)
+		{ //ä¹‹å¾Œæ…¢æ…¢å›žæŽ¨
 			point temp = {p.x + move[i].horiz, p.y + move[i].vert};
-			if(maze[temp.x][temp.y] == pathnumber){
+			if (maze[temp.x][temp.y] == pathnumber)
+			{
 				path.push(temp);
 				p = temp;
 				break;
@@ -77,24 +95,12 @@ int main(){
 		}
 	}
 
-	while(!path.empty()){
-			std::cout << path.top().x << " " << path.top().y << std::endl;
-			path.pop();
+	//std::cout << "1" << " " << "1" << std::endl;
+	while (!path.empty())
+	{
+		std::cout << path.top().x << " " << path.top().y << std::endl;
+		path.pop();
 	}
 
-//	std::stack<element*> result;
-//	element* pos = new element;
-//	pos = pathpoint.back();		//¬ö¿ý²×ÂI ¥Î¨Ó¦^±À 
-//	while(pos->last){
-//		result.push(pos);
-//		pos = pos->last;
-//	}
-//	
-//	std::cout << "1 1" << std::endl;
-//	while(!result.empty()){
-//			std::cout << result.top()->x << " " << result.top()->y << std::endl;
-//			result.pop();
-//	}
-	
-	return 0; 
+	return 0;
 }
